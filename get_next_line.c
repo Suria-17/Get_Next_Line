@@ -64,3 +64,45 @@ static char *extract_line(char *buffer)
     line[i] = '\0';
     return (line);
 }
+
+static char *refresh_buffer(char *buffer)
+{
+    int i;
+    int j;
+    char *new_buffer;
+
+    i = 0;
+    while (buffer[i] && buffer[i] != '\n')
+        i++;
+    if (!buffer[i])
+    {
+        free(buffer);
+        return (NULL);
+    }
+    new_buffer = malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
+    if (!new_buffer)
+        return (NULL);
+    i++;
+
+    j = 0;
+    while (buffer[i])
+        new_buffer[j++] = buffer[i++];
+    new_buffer[j] = '\0';
+    free(buffer);
+    return(new_buffer);
+}
+
+char *get_next_line(int fd)
+{
+    static char *buffer;
+    char *line;
+
+    if (fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
+    buffer = read_and_hold(fd, buffer);
+    if (!buffer)
+        return (NULL);
+    line = extract_line(buffer);
+    buffer = refresh_buffer(buffer);
+    return (line);
+}
