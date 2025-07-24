@@ -6,7 +6,7 @@
 /*   By: sramasam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:15:41 by sramasam          #+#    #+#             */
-/*   Updated: 2025/07/20 13:16:14 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/07/24 07:47:29 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1024
-#endif
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
 
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);

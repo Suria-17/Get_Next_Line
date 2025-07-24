@@ -6,7 +6,7 @@
 /*   By: sramasam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:16:28 by sramasam          #+#    #+#             */
-/*   Updated: 2025/07/20 13:40:01 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/07/24 08:09:17 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	int		j;
 	int		full_len;
 
-	if (!s1 || !s2)
-		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
 	i = 0;
 	j = 0;
 	full_len = ft_strlen(s1) + ft_strlen(s2);
