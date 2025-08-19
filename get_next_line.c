@@ -3,75 +3,109 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sramasam <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:40:25 by sramasam          #+#    #+#             */
-/*   Updated: 2025/07/24 08:16:14 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:35:44 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*read_and_hold(int fd, char *buffer)
+char	*read_data(int fd, char *buffer)
 {
-	char	*temp;
-	int		bytes_read;
+	char *temp;
+	int bytes_read;
 
 	temp = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!temp)
 		return (NULL);
-	bytes_read = 1;
-	while (!ft_strchr(buffer, '\n') && bytes_read != 0)
+
+	bytes_read = read(fd, temp, BUFFER_SIZE);
+	if (bytes_read == -1)
 	{
-		bytes_read = read(fd, temp, BUFFER_SIZE);
-		if (bytes_read == -1)
+		free(temp);
+		return (NULL);
+	}
+	temp[bytes_read] = '\0';
+
+	char *new_buffer = ft_strjoin(buffer, temp);
+	free(buffer);
+	free(temp);
+
+	if (!new_buffer)
+		return (NULL);
+
+	return (new_buffer);
+}
+
+int has_newline(char *buffer)
+{
+	if (!buffer)
+		return (0);
+
+	while (*buffer)
+	{
+		if (*buffer == '\n')
+			return (1);
+		buffer++;
+	}
+	return (0);
+}
+
+char *read_and_hold(int fd, char *buffer)
+{
+	char *new_buffer;
+
+	if (!buffer)
+		buffer = ft_strdup("");
+	if (!buffer)
+		return (NULL);
+
+	while (!has_newline(buffer))
+	{
+		new_buffer = read_data(fd, buffer);
+		if (!new_buffer)
 		{
-			free(temp);
+			if (buffer[0])
+				return (buffer);
+			free(buffer);
 			return (NULL);
 		}
-		temp[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, temp);
+		buffer = new_buffer;
 	}
-	free(temp);
 	return (buffer);
 }
 
-static char	*extract_line(char *buffer)
+char *extract_line(char *buffer)
 {
-	int		len;
-	int		i;
-	char	*line;
+	int len = 0, i = 0;
 
-	len = 0;
-	if (!buffer[len])
-		return (NULL);
 	while (buffer[len] && buffer[len] != '\n')
 		len++;
-	line = malloc(sizeof(char) * (len + 2));
+
+	char *line = malloc(sizeof(char) * (len + 1 + (buffer[len] == '\n')));
 	if (!line)
 		return (NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
+
+	while (i < len)
 	{
 		line[i] = buffer[i];
 		i++;
 	}
-	if (buffer[i] == '\n')
+	if (buffer[len] == '\n')
 	{
-		line[i] = buffer[i];
+		line[i] = '\n';
 		i++;
 	}
 	line[i] = '\0';
 	return (line);
 }
 
-static char	*refresh_buffer(char *buffer)
+char *refresh_buffer(char *buffer)
 {
-	int		i;
-	int		j;
-	char	*new_buffer;
+	int i = 0, j = 0;
 
-	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (!buffer[i])
@@ -79,29 +113,35 @@ static char	*refresh_buffer(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	new_buffer = malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
+
+	char *new_buffer = malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
 	if (!new_buffer)
 		return (NULL);
+
 	i++;
-	j = 0;
 	while (buffer[i])
-		new_buffer[j++] = buffer[i++];
+	{
+		new_buffer[j] = buffer[i];
+		i++;
+		j++;
+	}
 	new_buffer[j] = '\0';
 	free(buffer);
 	return (new_buffer);
 }
 
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	static char	*buffer;
-	char		*line;
-
+	static char *buffer;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+
 	buffer = read_and_hold(fd, buffer);
 	if (!buffer)
 		return (NULL);
-	line = extract_line(buffer);
+
+	char *line = extract_line(buffer);
 	buffer = refresh_buffer(buffer);
 	return (line);
 }
+

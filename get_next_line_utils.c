@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sramasam <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:16:28 by sramasam          #+#    #+#             */
-/*   Updated: 2025/07/24 08:09:17 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:37:28 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,16 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	if (!joined)
 		return (NULL);
 	while (s1[i])
+	{
 		joined[i] = s1[i];
-	i++;
+		i++;
+	}
 	while (s2[j])
+	{
 		joined[i] = s2[j];
-	i++;
-	j++;
+		i++;
+		j++;
+	}
 	joined[i] = '\0';
 	return (joined);
 }
