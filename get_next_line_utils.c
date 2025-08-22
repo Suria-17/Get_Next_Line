@@ -6,7 +6,7 @@
 /*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:16:28 by sramasam          #+#    #+#             */
-/*   Updated: 2025/08/19 15:37:28 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/08/22 19:03:16 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,17 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	int		j;
 	int		full_len;
 
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (ft_strdup(s1));
 	i = 0;
-	j = 0;
 	full_len = ft_strlen(s1) + ft_strlen(s2);
-	joined = (char *)malloc(sizeof(char) * (full_len + 1));
-	if (!joined)
+	joined = malloc(sizeof(char) * (full_len + 1));
+	if (!joined || !s1 || !s2)
 		return (NULL);
 	while (s1[i])
 	{
 		joined[i] = s1[i];
 		i++;
 	}
+	j = 0;
 	while (s2[j])
 	{
 		joined[i] = s2[j];
