@@ -6,7 +6,7 @@
 /*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:40:25 by sramasam          #+#    #+#             */
-/*   Updated: 2025/08/19 15:35:44 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/08/22 21:39:22 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ char	*read_data(int fd, char *buffer)
 	{
 		free(temp);
 		return (NULL);
+	}
+	if (bytes_read == 0)
+	{
+		free(temp);
+		return (buffer);
 	}
 	temp[bytes_read] = '\0';
 
@@ -72,6 +77,9 @@ char *read_and_hold(int fd, char *buffer)
 			free(buffer);
 			return (NULL);
 		}
+		if (new_buffer == buffer)
+			break;
+
 		buffer = new_buffer;
 	}
 	return (buffer);
