@@ -6,7 +6,7 @@
 /*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:16:28 by sramasam          #+#    #+#             */
-/*   Updated: 2025/08/22 19:03:16 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/08/24 17:13:37 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,34 +39,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	char	*joined;
-	int		i;
-	int		j;
-	int		full_len;
-
-	i = 0;
-	full_len = ft_strlen(s1) + ft_strlen(s2);
-	joined = malloc(sizeof(char) * (full_len + 1));
-	if (!joined || !s1 || !s2)
-		return (NULL);
-	while (s1[i])
-	{
-		joined[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j])
-	{
-		joined[i] = s2[j];
-		i++;
-		j++;
-	}
-	joined[i] = '\0';
-	return (joined);
-}
-
 char	*ft_strdup(const char *s)
 {
 	size_t	size;
@@ -89,28 +61,33 @@ char	*ft_strdup(const char *s)
 	return (dest);
 }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	size_t	i;
-	size_t	slen;
-	char	*sub;
+	char	*joined;
+	int		i;
+	int		j;
+	int		full_len;
 
-	if (!s)
-		return (NULL);
-	slen = ft_strlen(s);
-	if (start >= slen)
-		return (ft_strdup(""));
-	if (len > slen - start)
-		len = slen - start;
-	sub = (char *)malloc(sizeof(char) * (len + 1));
-	if (!sub)
-		return (NULL);
 	i = 0;
-	while (i < len)
+	j = 0;
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	full_len = ft_strlen(s1) + ft_strlen(s2);
+	joined = malloc(sizeof(char) * (full_len + 1));
+	if (!joined)
+		return (NULL);
+	while (s1[i])
 	{
-		sub[i] = s[start + i];
+		joined[i] = s1[i];
 		i++;
 	}
-	sub[i] = '\0';
-	return (sub);
+	while (s2[j])
+		joined[i++] = s2[j++];
+	joined[i] = '\0';
+	return (joined);
 }
+		
