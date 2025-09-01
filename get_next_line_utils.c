@@ -6,7 +6,7 @@
 /*   By: sramasam <sramasam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 13:16:28 by sramasam          #+#    #+#             */
-/*   Updated: 2025/08/24 17:13:37 by sramasam         ###   ########.fr       */
+/*   Updated: 2025/09/01 20:22:21 by sramasam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,77 +17,75 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	has_newline(const char *s)
 {
+	if (!s)
+		return (0);
 	while (*s)
 	{
-		if (*s == (char)c)
-		{
-			return ((char *)s);
-		}
+		if (*s == '\n')
+			return (1);
 		s++;
 	}
-	if (c == '\0')
-	{
-		return ((char *)s);
-	}
-	return (NULL);
+	return (0);
 }
 
 char	*ft_strdup(const char *s)
 {
-	size_t	size;
 	char	*dest;
 	size_t	i;
 
 	if (!s)
 		return (NULL);
-	size = ft_strlen(s);
-	dest = (char *)malloc(sizeof(char) * (size + 1));
-	if (dest == NULL)
+	dest = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!dest)
 		return (NULL);
 	i = 0;
-	while (i < size)
+	while (s[i])
 	{
 		dest[i] = s[i];
 		i++;
 	}
-	dest[size] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }
 
 char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char	*joined;
-	int		i;
-	int		j;
-	int		full_len;
+	char	*ptr;
 
-	i = 0;
-	j = 0;
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
-	full_len = ft_strlen(s1) + ft_strlen(s2);
-	joined = malloc(sizeof(char) * (full_len + 1));
+	joined = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!joined)
 		return (NULL);
-	while (s1[i])
-	{
-		joined[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-		joined[i++] = s2[j++];
-	joined[i] = '\0';
+	ptr = joined;
+	while (*s1)
+		*ptr++ = *s1++;
+	while (*s2)
+		*ptr++ = *s2++;
+	*ptr = '\0';
 	return (joined);
 }
-		
+
+char	*ft_join_and_free(char *buffer, char *temp)
+{
+	char	*new_buffer;
+
+	new_buffer = ft_strjoin(buffer, temp);
+	free(buffer);
+	free(temp);
+	if (!new_buffer)
+		return (NULL);
+	return (new_buffer);
+}
